@@ -13,9 +13,13 @@ export default function TimerChallenge({ title, targetTime }) {
 
   if (timeRemainning <= 0) {
     clearInterval(timer.current);
-    setTimeRemainning(targetTime * 1000);
     dialog.current.open();
   }
+
+  function handleReset() {
+    setTimeRemainning(targetTime * 1000);
+  }
+
   //let timer;
   //定义在这的timer组件重新渲染后就丢失了
   function handleStart() {
@@ -31,7 +35,12 @@ export default function TimerChallenge({ title, targetTime }) {
 
   return (
     <>
-      <ResultModal ref={dialog} targetTime={targetTime} result="lost" />
+      <ResultModal
+        ref={dialog}
+        targetTime={targetTime}
+        remainingTime={timeRemainning}
+        onReset={handleReset}
+      />
       <section className="challenge">
         <h2>{title}</h2>
         <p className="challenge-time">
