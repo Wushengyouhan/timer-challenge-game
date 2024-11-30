@@ -1,15 +1,25 @@
-import { useState } from "react";
-
+import { useState, useRef } from "react";
+//let timer;
+//定义在这点timer是所有定时器组件共用的
 export default function TimerChallenge({ title, targetTime }) {
   const [timerStarted, setTimerStarted] = useState(false);
   const [timerExpired, setTimerExpired] = useState(false);
+  const timer = useRef();
+
+  //let timer;
+  //定义在这的timer组件重新渲染后就丢失了
   function handleStart() {
-    setTimeout(() => {
+    timer.current = setTimeout(() => {
       setTimerExpired(true);
     }, targetTime * 1000);
 
     setTimerStarted(true);
   }
+
+  function handleStop() {
+    clearTimeout(timer.current);
+  }
+
   return (
     <section className="challenge">
       <h2>{title}</h2>
@@ -18,7 +28,7 @@ export default function TimerChallenge({ title, targetTime }) {
         {targetTime} second{targetTime > 1 ? "s" : ""}
       </p>
       <p>
-        <button onClick={handleStart}>
+        <button onClick={timerStarted ? handleStop : handleStart}>
           {timerStarted ? "Stop" : "Start"} Challenge
         </button>
       </p>
